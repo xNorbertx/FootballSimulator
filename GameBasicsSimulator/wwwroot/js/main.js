@@ -1,12 +1,11 @@
-﻿var TEAMS = [];
+﻿//GLOBAL VARIABLES
+var TEAMS = [];
 var CURRENT_MATCH;
 
+//Startup function
 $(function () {
     function initTeams(teams) {
-        TEAMS = teams.sort(function (a, b) {
-            return b.points - a.points;
-        });   
-        setStandings();
+        setStandings(teams);
 
         var matches = createMatches();
         setMatches(matches);
@@ -15,7 +14,11 @@ $(function () {
     $.when(DATAGATEWAY.load('team')).done(initTeams);
 });
 
-function setStandings() {
+function setStandings(teams) {
+    TEAMS = teams.sort(function (a, b) {
+        return b.points - a.points;
+    });  
+
     var goals, goalsconceded, diff;
     for (var i = 0; i < TEAMS.length; i++) {
         goals = (TEAMS[i].goals ? TEAMS[i].goals.length : 0);
@@ -108,18 +111,13 @@ function startMatch(matchTeams) {
 
 function setMatchScore(score) {
     $("#teams-wrapper").html("<span>" + CURRENT_MATCH[0].name + "</span> - " +
-                            "<span>" + CURRENT_MATCH[1].name + "</span>")
+                             "<span>" + CURRENT_MATCH[1].name + "</span>")
     $("#score-wrapper").html("<h2>" + score + "</h2>");
 
     $.when(DATAGATEWAY.load('team')).done(updateStanding);
 }
 
 function updateStanding(teams) {
-    TEAMS = teams.sort(function (a, b) {
-        return b.points - a.points;
-    });   
-
-    setStandings();
-
+    setStandings(teams);
     CURRENT_MATCH = null;
 }

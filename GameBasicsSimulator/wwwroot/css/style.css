@@ -1,3 +1,4 @@
-﻿.match span {
+﻿.match-display-team {
     width: 100px;
+    display: inline-block;
 }

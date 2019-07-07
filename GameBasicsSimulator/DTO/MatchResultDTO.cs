@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameBasicsSimulator.Model
 {
-    public class MatchResult
+    public class MatchResultDTO
     {
         public string Score { get; set; }
     }

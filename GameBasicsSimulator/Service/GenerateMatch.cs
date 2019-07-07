@@ -15,7 +15,7 @@ namespace GameBasicsSimulator.Service
             _context = context;
         }
 
-        public string Play(Team teamOne, Team teamTwo)
+        public MatchResultDTO Play(Team teamOne, Team teamTwo)
         {
             //Create a match
             Match match = new Match()
@@ -87,7 +87,10 @@ namespace GameBasicsSimulator.Service
             _context.Matches.Add(match);
             _context.SaveChanges();
 
-            return teamOneGoals.Count.ToString() + "-" + teamTwoGoals.Count.ToString();
+            return new MatchResultDTO
+            {
+                Score = teamOneGoals.Count.ToString() + "-" + teamTwoGoals.Count.ToString()
+            };
         }
 
         private double getOveralStrength(Team team)

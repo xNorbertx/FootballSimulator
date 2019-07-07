@@ -21,7 +21,7 @@ namespace GameBasicsSimulator.Controllers
         }
 
         [HttpPost]
-        public ActionResult<object> Match([FromBody]MatchDTO model)
+        public ActionResult<MatchResultDTO> Match([FromBody]MatchDTO model)
         {
             if (model.Teams.Count != 2)
             {
@@ -29,9 +29,9 @@ namespace GameBasicsSimulator.Controllers
             }
 
             GenerateMatch matchGenerator = new GenerateMatch(_context);
-            string res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
+            MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
 
-            return new { score = res }; 
+            return res; 
         }
     }
 }
