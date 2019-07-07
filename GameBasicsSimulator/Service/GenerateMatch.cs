@@ -17,6 +17,7 @@ namespace GameBasicsSimulator.Service
 
         public string Play(Team teamOne, Team teamTwo)
         {
+            //Create a match
             Match match = new Match()
             {
                 MatchTeams = new List<MatchTeam>
@@ -34,19 +35,19 @@ namespace GameBasicsSimulator.Service
 
             List<Goal> goals = new List<Goal>();
 
+            //Determine strength indicator of teams based on stats
             double teamOneTotal = getOveralStrength(teamOne);
             double teamTwoTotal = getOveralStrength(teamTwo);
 
             double teamOneWinPercentage = teamOneTotal / teamTwoTotal;
             double teamTwoWinPercentage = teamTwoTotal / teamOneTotal;
 
+            //Add goals for each team
             goals.AddRange(addGoals(teamOneWinPercentage, teamOne, teamTwo));
             goals.AddRange(addGoals(teamTwoWinPercentage, teamTwo, teamOne));
 
             match.Goals = goals;
-
-            _context.Matches.Add(match);
-           
+            
             List<Goal> teamOneGoals = new List<Goal>();
             List<Goal> teamTwoGoals = new List<Goal>();
             foreach (Goal goal in match.Goals)
@@ -61,6 +62,7 @@ namespace GameBasicsSimulator.Service
                 }
             }
 
+            //Add points and alter morale stats for each team
             Team DbTeamOne = _context.Teams.Where(t => t.Id == teamOne.Id).First();
             Team DbTeamTwo = _context.Teams.Where(t => t.Id == teamTwo.Id).First();
 
@@ -82,6 +84,7 @@ namespace GameBasicsSimulator.Service
                 DbTeamTwo.Points += 1;
             }
 
+            _context.Matches.Add(match);
             _context.SaveChanges();
 
             return teamOneGoals.Count.ToString() + "-" + teamTwoGoals.Count.ToString();
@@ -92,14 +95,15 @@ namespace GameBasicsSimulator.Service
             return ((team.Strength * 2) + team.Morale) / 3;
         }
 
-        private List<Goal> addGoals(double power, Team team, Team opponent)
+        private List<Goal> addGoals(double strength, Team team, Team opponent)
         {
             List<Goal> goals = new List<Goal>();
             Random random = new Random();
             double luck = (double)random.Next(10000) / (double)10000;
             int time = 1;
 
-            while (luck * power * (1 - (time*(0.5/90))) > threshold)
+            //The algorithm which decides the amount of goals, based on luck and strength
+            while (luck * strength * (1 - (time*(0.5/90))) > threshold)
             {
                 time = random.Next(time, 90);
                 goals.Add(new Goal

@@ -54,9 +54,10 @@ function createMatches() {
         return true;
     }
 
-    var res = [], match;
-    for (var i = 0; i < TEAMS.length-1; i++) {
-        res.push([]);   
+    var res = [], match; 
+    for (var i = 0; i < TEAMS.length - 1; i++) { 
+        //This algorithm only seems to work for 4 teams, so needs to be reconsidered in case of expanding the amount of teams
+        res.push([]);
         for (var j = 0; j < TEAMS.length; j++) {
             if (findIfNotUsedTeam(TEAMS[j], res[i])) {          
                 for (var k = 0; k < TEAMS.length; k++) {
@@ -71,6 +72,7 @@ function createMatches() {
             }
         }   
     }
+
 
     return res;
 }

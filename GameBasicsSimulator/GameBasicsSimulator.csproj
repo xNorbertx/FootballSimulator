@@ -22,4 +22,7 @@
     <Folder Include="DB\" />
     <Folder Include="DTO\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\js\teams.js" />
+  </ItemGroup>
 </Project>
