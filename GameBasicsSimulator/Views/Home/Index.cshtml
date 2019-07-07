@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/datagateway.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/js/main.js")"></script>
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/css/style.css")" />
+</head>
+<body>
+    <fieldset>
+        <legend>Standings:</legend>
+        <table>
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Played</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>GD</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="teamName"></td>
+                    <td class="played"></td>
+                    <td class="goalsFor"></td>
+                    <td class="goalsAgainst"></td>
+                    <td class="goalsDiff"></td>
+                    <td class="points"></td>
+                </tr>
+                <tr>
+                    <td class="teamName"></td>
+                    <td class="played"></td>
+                    <td class="goalsFor"></td>
+                    <td class="goalsAgainst"></td>
+                    <td class="goalsDiff"></td>
+                    <td class="points"></td>
+                </tr>
+                <tr>
+                    <td class="teamName"></td>
+                    <td class="played"></td>
+                    <td class="goalsFor"></td>
+                    <td class="goalsAgainst"></td>
+                    <td class="goalsDiff"></td>
+                    <td class="points"></td>
+                </tr>
+                <tr>
+                    <td class="teamName"></td>
+                    <td class="played"></td>
+                    <td class="goalsFor"></td>
+                    <td class="goalsAgainst"></td>
+                    <td class="goalsDiff"></td>
+                    <td class="points"></td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset>
+        <legend>Fixtures</legend>
+        <div class="match" id="0">
+            <span></span>
+            -
+            <span></span>
+            <input type="button" value="play" />
+        </div>
+        <div class="match" id="1">
+            <span></span>
+            -
+            <span></span>
+            <input type="button" value="play" hidden />
+        </div>
+        <div class="match" id="2">
+            <span></span>
+            -
+            <span></span>
+            <input type="button" value="play" hidden />
+        </div>
+        <div class="match" id="3">
+            <span></span>
+            -
+            <span></span>
+            <input type="button" value="play" hidden />
+        </div>
+        <div class="match" id="4">
+            <span></span>
+            -
+            <span></span>
+            <input type="button" value="play" hidden />
+        </div>
+        <div class="match" id="5">
+            <span></span>
+            -
+            <span></span>
+            <input type="button" value="play" hidden />
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Match</legend>
+        <div id="teams-wrapper"></div>
+        <div id="score-wrapper"></div>
+        <div id="match-wrapper"></div>
+    </fieldset>
+    <input id="btn-clear" type="button" value="clear" />
+</body>
+</html>
