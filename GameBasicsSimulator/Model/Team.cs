@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GameBasicsSimulator.Model
 {
     public class Team
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public int Strength { get; set; }
         public int Morale { get; set; }

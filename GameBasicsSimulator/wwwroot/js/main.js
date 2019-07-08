@@ -1,6 +1,7 @@
 ﻿//GLOBAL VARIABLES
 var TEAMS = [];
 var CURRENT_MATCH;
+var CURRENT_MATCH_IDX;
 
 //Startup function
 $(function () {
@@ -10,6 +11,8 @@ $(function () {
         var matches = createMatches();
         setMatches(matches);
     }
+
+    $("#btn-clear").click(clear);
 
     $.when(DATAGATEWAY.load('team')).done(initTeams);
 });
@@ -86,15 +89,14 @@ function setMatches(matches) {
         allMatches = allMatches.concat(matches[i]);
     }
 
-    var matchDivs = $("div.match");
-    if (matchDivs.length === allMatches.length) {
-        for (var i = 0; i < matchDivs.length; i++) {
-            $(matchDivs[i]).find("span")[0].innerHTML = allMatches[i][0].name;
-            $(matchDivs[i]).find("span")[1].innerHTML = allMatches[i][1].name;
-            $(matchDivs[i]).find("input").click(function (e) {
-                $(e.currentTarget).hide();
-                $(e.currentTarget.parentElement).next().find("input").show();
-                CURRENT_MATCH = allMatches[parseInt(e.currentTarget.parentElement.id)];
+    var $matchDivs = $("div.match");
+    if ($matchDivs.length === allMatches.length) {
+        for (var i = 0; i < $matchDivs.length; i++) {
+            $($matchDivs[i]).find("span")[0].innerHTML = allMatches[i][0].name;
+            $($matchDivs[i]).find("span")[1].innerHTML = allMatches[i][1].name;
+            $($matchDivs[i]).find("input").click(function (e) {
+                CURRENT_MATCH_IDX = parseInt(e.currentTarget.parentElement.id);
+                CURRENT_MATCH = allMatches[CURRENT_MATCH_IDX];
                 startMatch(CURRENT_MATCH);
             });
         }
@@ -114,10 +116,36 @@ function setMatchScore(score) {
                              "<span>" + CURRENT_MATCH[1].name + "</span>")
     $("#score-wrapper").html("<h2>" + score + "</h2>");
 
-    $.when(DATAGATEWAY.load('team')).done(updateStanding);
+    $(".match-result")[CURRENT_MATCH_IDX].innerHTML = score;
+
+    var $activeBtn = $("input.btn-play:visible");
+    $activeBtn.hide();
+    $activeBtn.parent().next().find("input.btn-play").show();
+
+    $.when(DATAGATEWAY.load('team')).done(setMatchScoreSuccess);
 }
 
-function updateStanding(teams) {
+function setMatchScoreSuccess(teams) {
     setStandings(teams);
     CURRENT_MATCH = null;
+}
+
+function clear() {
+    function onSuccess() {
+        $.when(DATAGATEWAY.load('team')).done(clearedSuccessActions);
+    }
+
+    $.when(DATAGATEWAY.update('match/clear')).done(onSuccess);
+}
+
+function clearedSuccessActions(teams) {
+    var $activeBtn = $("input.btn-play:visible");
+    if ($activeBtn.length === 1) {
+        $activeBtn.hide();
+    }
+    $($("div.match")[0]).find(".btn-play").show();
+
+    $(".match-result").html("");
+
+    setStandings(teams);
 }

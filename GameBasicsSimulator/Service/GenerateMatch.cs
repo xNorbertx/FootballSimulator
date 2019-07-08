@@ -8,7 +8,7 @@ namespace GameBasicsSimulator.Service
 {
     public class GenerateMatch
     {
-        private double threshold = 0.75;
+        private double threshold = 0.65;
         private SimulatorContext _context;
        
         public GenerateMatch(SimulatorContext context) {

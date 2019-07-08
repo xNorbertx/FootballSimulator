@@ -31,7 +31,26 @@ namespace GameBasicsSimulator.Controllers
             GenerateMatch matchGenerator = new GenerateMatch(_context);
             MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
 
-            return res; 
+            return Ok(res); 
+        }
+
+        [HttpPost]
+        [Route("clear")]
+        public ActionResult Clear()
+        {
+            //Not quite sure why cascade delete is not working here..
+            _context.MatchTeams.RemoveRange(_context.MatchTeams);
+            _context.Goals.RemoveRange(_context.Goals);
+            _context.Cards.RemoveRange(_context.Cards);
+            _context.Matches.RemoveRange(_context.Matches);
+            foreach (Team team in _context.Teams)
+            {
+                team.Points = 0;
+            }
+
+            _context.SaveChanges();
+                
+            return NoContent();
         }
     }
 }
