@@ -17,6 +17,7 @@ $(function () {
     $.when(DATAGATEWAY.load('team')).done(initTeams);
 });
 
+//Set standings for each team
 function setStandings(teams) {
     TEAMS = teams.sort(function (a, b) {
         return b.points - a.points;
@@ -37,6 +38,7 @@ function setStandings(teams) {
     }
 }
 
+//Create the 6 different matches that need to be played
 function createMatches() {
     function findIfNotUsedTeam(val, arr) {
         var tot = [];
@@ -83,6 +85,7 @@ function createMatches() {
     return res;
 }
 
+//Display the matches from createMatches() on the screen
 function setMatches(matches) {
     var allMatches = [];
     for (var i = 0; i < matches.length; i++) {
@@ -94,6 +97,7 @@ function setMatches(matches) {
         for (var i = 0; i < $matchDivs.length; i++) {
             $($matchDivs[i]).find("span")[0].innerHTML = allMatches[i][0].name;
             $($matchDivs[i]).find("span")[1].innerHTML = allMatches[i][1].name;
+            //Set onclick function for the play button
             $($matchDivs[i]).find("input").click(function (e) {
                 CURRENT_MATCH_IDX = parseInt(e.currentTarget.parentElement.id);
                 CURRENT_MATCH = allMatches[CURRENT_MATCH_IDX];
@@ -103,6 +107,7 @@ function setMatches(matches) {
     }
 }
 
+//Start a match
 function startMatch(matchTeams) {
     function onSuccess(data) {
         setMatchScore(data.score);
@@ -111,6 +116,7 @@ function startMatch(matchTeams) {
     $.when(DATAGATEWAY.update('match', JSON.stringify({ Teams: [matchTeams[0], matchTeams[1]] }))).done(onSuccess);
 }
 
+//Set score of match
 function setMatchScore(score) {
     $("#teams-wrapper").html("<span>" + CURRENT_MATCH[0].name + "</span> - " +
                              "<span>" + CURRENT_MATCH[1].name + "</span>")
@@ -125,11 +131,13 @@ function setMatchScore(score) {
     $.when(DATAGATEWAY.load('team')).done(setMatchScoreSuccess);
 }
 
+//Set new standings and empty global variable
 function setMatchScoreSuccess(teams) {
     setStandings(teams);
     CURRENT_MATCH = null;
 }
 
+//Handle clear button action
 function clear() {
     function onSuccess() {
         $.when(DATAGATEWAY.load('team')).done(clearedSuccessActions);
@@ -138,6 +146,7 @@ function clear() {
     $.when(DATAGATEWAY.update('match/clear')).done(onSuccess);
 }
 
+//Set new standings and clear old scores from screen
 function clearedSuccessActions(teams) {
     var $activeBtn = $("input.btn-play:visible");
     if ($activeBtn.length === 1) {
@@ -146,6 +155,8 @@ function clearedSuccessActions(teams) {
     $($("div.match")[0]).find(".btn-play").show();
 
     $(".match-result").html("");
+    $("#teams-wrapper").html("");
+    $("#score-wrapper").html("");
 
     setStandings(teams);
 }
