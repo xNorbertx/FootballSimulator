@@ -40,49 +40,91 @@ function setStandings(teams) {
 
 //Create the 6 different matches that need to be played
 function createMatches() {
-    function findIfNotUsedTeam(val, arr) {
-        var tot = [];
-        for(var i = 0; i < arr.length; i++){
-            tot = tot.concat(arr[i]);  
-        }
-        return !tot.includes(val);
-    }
-
-    function findIfNotUsedMatch(match, arr) {
-        var tot = [];
-        for(var i = 0; i < arr.length; i++){
-            tot = tot.concat(arr[i]);  
-        }
-        
-        for (var i = 0; i < tot.length; i++ ) {
-            if (tot[i].includes(match[0]) && tot[i].includes(match[1])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    var res = [], match; 
-    for (var i = 0; i < TEAMS.length - 1; i++) { 
-        //This algorithm only seems to work for 4 teams, so needs to be reconsidered in case of expanding the amount of teams
-        res.push([]);
-        for (var j = 0; j < TEAMS.length; j++) {
-            if (findIfNotUsedTeam(TEAMS[j], res[i])) {          
-                for (var k = 0; k < TEAMS.length; k++) {
-                    if (TEAMS[j] !== TEAMS[k] && findIfNotUsedTeam(TEAMS[k], res[i])) {
-                        match = [TEAMS[j], TEAMS[k]];
-                        if (findIfNotUsedMatch(match, res)) {
-                            res[i].push([TEAMS[j], TEAMS[k]]);    
-                            break;
-                        }
+    var match = [],
+    matchDay = [],
+    allMatches = [],
+    tmpArray,
+    tmp,
+    max = TEAMS[TEAMS.length - 1],
+    current = TEAMS[0],
+    len = TEAMS.length;
+    for (var i = 1; i<len; i++) {
+        tmpArray = [];
+        for (var j = 0; j<len; j++) {
+            //First match round
+            if (i === 1) {
+                if (j <= 1) {
+                    if (j === 0) {
+                        match.push(current);
+                        tmpArray.push(TEAMS.shift());
+                    } else {
+                        match.push(max);
+                        tmpArray.push(TEAMS.pop());
+                        matchDay.push(match);
+                        match = [];
+                    } 
+                } else {
+                    if (j % 2 === 0) {
+                        tmp = TEAMS.shift();
+                        match.push(tmp);
+                        tmpArray.push(tmp);
+                    } else {
+                        tmp = TEAMS.pop();
+                        match.push(tmp);
+                        tmpArray.push(tmp);
+                        matchDay.push(match);
+                        match = [];
                     }
-                }     
+                }
+            //Consequent match
+            } else {
+                if (j <= 1) {
+                    if (i % 2 === 1) {
+                        if (j === 0) {
+                            match.push(max);
+                            TEAMS = TEAMS.filter(t => t !== max);
+                            tmpArray.push(max);
+                        } else {
+                            match.push(current);
+                            tmpArray.push(TEAMS.pop());
+                        }
+                    } else {
+                        if (j === 0) {
+                            match.push(current);
+                            tmpArray.push(TEAMS.pop());
+                        } else {
+                            match.push(max);
+                            TEAMS = TEAMS.filter(t => t !== max);
+                            tmpArray.push(max);
+                        }
+                    } 
+                    if (j === 1) {
+                        matchDay.push(match);
+                        match = [];
+                    }
+                } else {
+                    if (j % 2 === 0) {
+                        tmp = TEAMS[TEAMS.length - 2];
+                        TEAMS = TEAMS.filter(t => t !== tmp);
+                        match.push(tmp);
+                        tmpArray.push(tmp);
+                    } else {
+                        tmp = TEAMS[TEAMS.length - 1];
+                        TEAMS = TEAMS.filter(t => t !== tmp);
+                        match.push(tmp);
+                        tmpArray.push(tmp);
+                        matchDay.push(match);
+                        match = [];
+                    }       
+                }       
             }
-        }   
+        }
+        current = tmpArray[tmpArray.length - 1];
+        TEAMS = tmpArray;
+        allMatches.push(matchDay);
+        matchDay = [];
     }
-
-
-    return res;
+    return allMatches;
 }
 
 //Display the matches from createMatches() on the screen

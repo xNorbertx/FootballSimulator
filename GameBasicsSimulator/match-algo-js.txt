@@ -1,0 +1,87 @@
+var x = [1,2,3,4,5,6];
+var match = [],
+    matchDay = [],
+    allMatches = [],
+		tmpArray,
+		tmp,
+		idx,
+    max = x[x.length-1],
+    last = x[0],
+    len = x.length;
+for (var i = 1; i < len; i++) {
+	tmpArray = [];
+	for (var j = 0; j < len; j++) {
+			if (i == 1) {
+				if (j == 0 || j == 1) {
+					if (j == 0) {
+						match.push(last);
+						tmpArray.push(x.shift());
+					} else {
+						match.push(max);
+						tmpArray.push(x.pop());
+						matchDay.push(match);
+						match = [];
+					} 
+				} else {
+					if (j % 2 == 0) {
+						tmp = x.shift();
+						match.push(tmp);
+						tmpArray.push(tmp);
+					} else {
+						tmp = x.pop();
+						match.push(tmp);
+						tmpArray.push(tmp);
+						matchDay.push(match);
+						match = [];
+					}
+				}
+			} else {
+				if (j == 0 || j == 1) {
+					if (i%2 === 1) {
+						if (j == 0) {
+							match.push(max);
+							x = x.filter(x => x !== max);
+							tmpArray.push(max);
+						} else {
+							match.push(last);
+							tmpArray.push(x.pop());
+						}
+					} else {
+						if (j == 0) {
+							match.push(last);
+							tmpArray.push(x.pop());
+						} else {
+							match.push(max);
+							x = x.filter(x => x !== max);
+							tmpArray.push(max);
+						}
+					} 
+					if (j === 1) {
+						matchDay.push(match);
+						match = [];
+					}
+				} else {
+					if (j % 2 == 0) {
+						tmp = x[x.length-2];
+						x = x.filter(x => x !== tmp);
+						match.push(tmp);
+						tmpArray.push(tmp);
+					} else {
+						tmp = x[x.length-1];
+						x = x.filter(x => x !== tmp);
+						match.push(tmp);
+						tmpArray.push(tmp);
+						matchDay.push(match);
+						match = [];
+					}		
+				}		
+			}
+    }
+	last = tmpArray[tmpArray.length-1];
+	console.log("last = "+last);
+	console.log(tmpArray);
+	x = tmpArray;
+	allMatches.push(matchDay);
+	matchDay = [];
+}
+console.log(allMatches);

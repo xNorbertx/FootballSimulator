@@ -20,8 +20,16 @@ namespace GameBasicsSimulator.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public ActionResult GetMatches()
+        {
+            List<Match> matches = _context.Matches.ToList();
+
+            return Ok(matches);
+        }
+
         [HttpPost]
-        public ActionResult<MatchResultDTO> Match([FromBody]MatchDTO model)
+        public ActionResult Match([FromBody]MatchDTO model)
         {
             if (model.Teams.Count != 2)
             {
