@@ -47,7 +47,6 @@ namespace GameBasicsSimulator.Controllers
         public ActionResult Clear()
         {
             //Not quite sure why cascade delete is not working here..
-            _context.MatchTeams.RemoveRange(_context.MatchTeams);
             _context.Goals.RemoveRange(_context.Goals);
             _context.Cards.RemoveRange(_context.Cards);
             _context.Matches.RemoveRange(_context.Matches);

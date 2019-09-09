@@ -18,20 +18,7 @@ namespace GameBasicsSimulator.Service
         public MatchResultDTO Play(Team teamOne, Team teamTwo)
         {
             //Create a match
-            Match match = new Match()
-            {
-                MatchTeams = new List<MatchTeam>
-                {
-                    new MatchTeam
-                    {
-                        TeamId = teamOne.Id
-                    },
-                    new MatchTeam
-                    {
-                        TeamId = teamTwo.Id
-                    }
-                }
-            };
+            Match match = new Match();
 
             List<Goal> goals = new List<Goal>();
 
@@ -112,8 +99,7 @@ namespace GameBasicsSimulator.Service
                 goals.Add(new Goal
                 {
                     Minute = time,
-                    TeamId = team.Id,
-                    OpponentId = opponent.Id
+                    TeamId = team.Id
                 });
             }
             return goals;

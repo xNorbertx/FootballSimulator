@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameBasicsSimulator.API
 {
     [Route("api/[controller]")]
-    public class TeamController : Controller
+    public class TeamController : ControllerBase
     {
         private SimulatorContext _context;
 
@@ -19,9 +19,9 @@ namespace GameBasicsSimulator.API
         {
             _context = context;
         }
-        // GET: api/values
+
         [HttpGet]
-        public ActionResult<IEnumerable<Team>> Get()
+        public ActionResult Get()
         {
             List<Team> teams = _context.Teams.ToList();
 
@@ -30,8 +30,6 @@ namespace GameBasicsSimulator.API
                 foreach (Team team in teams)
                 {
                     team.Goals = _context.Goals.Where(g => g.TeamId == team.Id).ToList();
-                    team.GoalsConceded = _context.Goals.Where(g => g.OpponentId == team.Id).ToList();
-                    team.MatchTeams = _context.MatchTeams.Where(mt => mt.TeamId == team.Id).ToList();
                 }
 
                 return Ok(teams);

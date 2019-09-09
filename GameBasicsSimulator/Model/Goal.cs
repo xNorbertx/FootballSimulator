@@ -12,10 +12,6 @@ namespace GameBasicsSimulator.Model
         [Required]
         public Team Team { get; set; }
 
-        public int OpponentId { get; set; }
-        [Required]
-        public Team Opponent { get; set; }
-
         public int MatchId { get; set;}
         [Required]
         public Match Match { get; set; }

@@ -8,8 +8,8 @@ namespace GameBasicsSimulator.Model
         public int Id { get; set; }
 
         public int MatchDayId { get; set; }
-        public List<MatchTeam> MatchTeams { get; set; }
-        public List<Goal> Goals { get; set; }
-        public List<Card> Cards { get; set; }
+        public ICollection<Team> Teams { get; set; }
+        public ICollection<Goal> Goals { get; set; }
+        public ICollection<Card> Cards { get; set; }
     }
 }
