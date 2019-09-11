@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace GameBasicsSimulator.Model
 {
-    public class MatchDTO
+    public class MatchDto
     {
-        public IList<Team> Teams { get; set; }
+        public string TeamOne { get; set; }
+        public string TeamTwo { get; set; }
     }
 }

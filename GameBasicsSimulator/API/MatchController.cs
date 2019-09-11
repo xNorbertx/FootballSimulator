@@ -6,6 +6,7 @@ using GameBasicsSimulator.DB;
 using GameBasicsSimulator.Model;
 using GameBasicsSimulator.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameBasicsSimulator.Controllers
 {
@@ -23,24 +24,31 @@ namespace GameBasicsSimulator.Controllers
         [HttpGet]
         public ActionResult GetMatches()
         {
-            List<Match> matches = _context.Matches.ToList();
+            List<MatchDto> matches = _context.Matches
+                .Select(x =>
+                    new MatchDto
+                    {
+                        TeamOne = x.TeamOne.Name,
+                        TeamTwo = x.TeamTwo.Name
+                    })
+                .ToList();
 
             return Ok(matches);
         }
 
         [HttpPost]
-        public ActionResult Match([FromBody]MatchDTO model)
-        {
-            if (model.Teams.Count != 2)
-            {
-                return BadRequest("Two teams are required for a match");
-            }
+        //public ActionResult Match([FromBody]MatchDto model)
+        //{
+        //    if (model.Teams.Count != 2)
+        //    {
+        //        return BadRequest("Two teams are required for a match");
+        //    }
 
-            GenerateMatch matchGenerator = new GenerateMatch(_context);
-            MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
+        //    GenerateMatch matchGenerator = new GenerateMatch(_context);
+        //    MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
 
-            return Ok(res); 
-        }
+        //    return Ok(res); 
+        //}
 
         [HttpPost]
         [Route("clear")]

@@ -21,7 +21,17 @@ namespace GameBasicsSimulator.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<Match>()
+                .HasOne(x => x.TeamOne)
+                .WithMany(x => x.HomeMatches)
+                .HasForeignKey(x => x.TeamOneId)
+                .HasConstraintName("FK_Match_TeamOne");
+
+            modelBuilder.Entity<Match>()
+                .HasOne(x => x.TeamTwo)
+                .WithMany(x => x.AwayMatches)
+                .HasForeignKey(x => x.TeamTwoId)
+                .HasConstraintName("FK_Match_TeamTwo");
         }
     }
 }

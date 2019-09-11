@@ -6,7 +6,7 @@ var CURRENT_MATCH_IDX;
 $(function () {
     function initTeams(teams) {
         setStandings(teams);
-        //setMatches(matches);
+        getMatches();
     }
 
     $("#btn-clear").click(clear);
@@ -35,22 +35,25 @@ function setStandings(teams) {
     }
 }
 
-//Display the matches from createMatches() on the screen
-function setMatches(matches) {
-    var allMatches = [];
-    for (var i = 0; i < matches.length; i++) {
-        allMatches = allMatches.concat(matches[i]);
+function getMatches() {
+    function onSuccess(data) {
+        setMatches(data)
     }
 
+    $.when(DATAGATEWAY.load('match')).done(onSuccess);
+}
+
+//Display the matches from createMatches() on the screen
+function setMatches(matches) {
     var $matchDivs = $("div.match");
-    if ($matchDivs.length === allMatches.length) {
+    if ($matchDivs.length === matches.length) {
         for (var i = 0; i < $matchDivs.length; i++) {
-            $($matchDivs[i]).find("span")[0].innerHTML = allMatches[i][0].name;
-            $($matchDivs[i]).find("span")[1].innerHTML = allMatches[i][1].name;
+            $($matchDivs[i]).find("span")[0].innerHTML = matches[i].teamOne;
+            $($matchDivs[i]).find("span")[1].innerHTML = matches[i].teamTwo;
             //Set onclick function for the play button
             $($matchDivs[i]).find("input").click(function (e) {
                 CURRENT_MATCH_IDX = parseInt(e.currentTarget.parentElement.id);
-                CURRENT_MATCH = allMatches[CURRENT_MATCH_IDX];
+                CURRENT_MATCH = matches[CURRENT_MATCH_IDX];
                 startMatch(CURRENT_MATCH);
             });
         }
