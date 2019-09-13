@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GameBasicsSimulator.DB;
-using GameBasicsSimulator.Model;
-using GameBasicsSimulator.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Simulator.Core.DTO;
+using Simulator.Core.Model;
+using Simulator.Infrastructure.DB;
 
-namespace GameBasicsSimulator.Controllers
+namespace Simulator.Web.API
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -24,9 +23,9 @@ namespace GameBasicsSimulator.Controllers
         [HttpGet]
         public ActionResult GetMatches()
         {
-            List<MatchDto> matches = _context.Matches
+            List<SimpleMatchDto> matches = _context.Matches
                 .Select(x =>
-                    new MatchDto
+                    new SimpleMatchDto
                     {
                         TeamOne = x.TeamOne.Name,
                         TeamTwo = x.TeamTwo.Name
@@ -37,18 +36,25 @@ namespace GameBasicsSimulator.Controllers
         }
 
         [HttpPost]
-        //public ActionResult Match([FromBody]MatchDto model)
-        //{
-        //    if (model.Teams.Count != 2)
-        //    {
-        //        return BadRequest("Two teams are required for a match");
-        //    }
+        public ActionResult Play([FromBody]SimpleMatchDto model)
+        {
+            if (!String.IsNullOrEmpty(model.TeamOne) && !String.IsNullOrEmpty(model.TeamTwo))
+            {
+                return BadRequest("Oops.. no teams");
+            }
 
-        //    GenerateMatch matchGenerator = new GenerateMatch(_context);
-        //    MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
+            //Find teams
+            List<Team> teams = _context.Teams.Where(t => t.Name == model.TeamOne ||
+                                                         t.Name == model.TeamTwo).ToList();
 
-        //    return Ok(res); 
-        //}
+            //Play match
+            var matchResult = teams.PlayMatch();
+            //Extension method for play match algorithm
+            //GenerateMatch matchGenerator = new GenerateMatch(_context);
+            //MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
+
+            return Ok(); 
+        }
 
         [HttpPost]
         [Route("clear")]

@@ -1,7 +1,13 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBasicsSimulator", "GameBasicsSimulator\GameBasicsSimulator.csproj", "{201D918D-E235-4D79-A6BF-FDEE34BED9AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Web", "GameBasicsSimulator\Simulator.Web.csproj", "{201D918D-E235-4D79-A6BF-FDEE34BED9AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Infrastructure", "Simulator.Infrastructure\Simulator.Infrastructure.csproj", "{FC0A5EEE-9C9F-4EF8-B513-0081CD08B668}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Core", "Simulator.Core\Simulator.Core.csproj", "{53F364EC-CCEB-403E-B360-F84EAD3A9E09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator.Engine", "Simulator.Engine\Simulator.Engine.csproj", "{5BE920A9-784E-41C9-95E6-198138975675}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,5 +19,17 @@ Global
 		{201D918D-E235-4D79-A6BF-FDEE34BED9AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{201D918D-E235-4D79-A6BF-FDEE34BED9AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{201D918D-E235-4D79-A6BF-FDEE34BED9AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0A5EEE-9C9F-4EF8-B513-0081CD08B668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0A5EEE-9C9F-4EF8-B513-0081CD08B668}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0A5EEE-9C9F-4EF8-B513-0081CD08B668}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0A5EEE-9C9F-4EF8-B513-0081CD08B668}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53F364EC-CCEB-403E-B360-F84EAD3A9E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53F364EC-CCEB-403E-B360-F84EAD3A9E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53F364EC-CCEB-403E-B360-F84EAD3A9E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53F364EC-CCEB-403E-B360-F84EAD3A9E09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BE920A9-784E-41C9-95E6-198138975675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BE920A9-784E-41C9-95E6-198138975675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BE920A9-784E-41C9-95E6-198138975675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BE920A9-784E-41C9-95E6-198138975675}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

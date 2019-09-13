@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using GameBasicsSimulator.DB;
-using GameBasicsSimulator.Model;
 using Microsoft.AspNetCore.Mvc;
+using Simulator.Core.Model;
+using Simulator.Infrastructure.DB;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace GameBasicsSimulator.API
+namespace Simulator.Web.API
 {
     [Route("api/[controller]")]
     public class TeamController : ControllerBase

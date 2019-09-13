@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GameBasicsSimulator.Model
+namespace Simulator.Core.DTO
 {
     public class MatchResultDTO
     {

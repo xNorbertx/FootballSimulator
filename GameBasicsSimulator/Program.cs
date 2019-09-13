@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using GameBasicsSimulator.DB;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Simulator.Infrastructure.DB;
 
-namespace GameBasicsSimulator
+namespace Simulator.Web
 {
     public class Program
     {
@@ -23,7 +16,7 @@ namespace GameBasicsSimulator
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<SimulatorContext>();
 
-                Initialize.InitializeDb(services);
+                Initialize.InitializeDb(context);
             }
 
             host.Run();

@@ -6,29 +6,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App">
-      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
-      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.2"><PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+<Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+</PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Service\" />
     <Folder Include="Controllers\" />
     <Folder Include="Views\" />
     <Folder Include="Views\Home\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\css\" />
-    <Folder Include="DB\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Methods\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\js\teams.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="EmptyCSharpFile.cs" />
+    <Compile Remove="Methods\Match.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Simulator.Core\Simulator.Core.csproj" />
+    <ProjectReference Include="..\Simulator.Engine\Simulator.Engine.csproj" />
+    <ProjectReference Include="..\Simulator.Infrastructure\Simulator.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GameBasicsSimulator.DB;
-using GameBasicsSimulator.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,8 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Simulator.Infrastructure.DB;
 
-namespace GameBasicsSimulator
+namespace Simulator.Web
 {
     public class Startup
     {
@@ -29,7 +28,10 @@ namespace GameBasicsSimulator
         public void ConfigureServices(IServiceCollection services)
         {
             //Create InMemory Database (in a more substantial project I would create a proper database)
-            services.AddDbContext<SimulatorContext>(options => options.UseInMemoryDatabase(databaseName: "Simulator"));
+            services.AddDbContext<SimulatorContext>(opt =>
+            {
+                opt.UseInMemoryDatabase("SimulatorContext");
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(opt =>

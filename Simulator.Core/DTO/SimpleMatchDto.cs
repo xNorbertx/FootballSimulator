@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GameBasicsSimulator.Model
+namespace Simulator.Core.DTO
 {
-    public class MatchDto
+    public class SimpleMatchDto
     {
         public string TeamOne { get; set; }
         public string TeamTwo { get; set; }

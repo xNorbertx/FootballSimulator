@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameBasicsSimulator.Model
+namespace Simulator.Core.Model
 {
     public class Team
     {

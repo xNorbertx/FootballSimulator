@@ -1,49 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameBasicsSimulator.Model;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Simulator.Core.Model;
 
-namespace GameBasicsSimulator.DB
+namespace Simulator.Engine.Algorithms
 {
-    public static class Initialize
+    //Algorithm comes from: https://blog.moove-it.com/algorithm-generation-soccer-fixture/
+    public static class CreateMatches
     {
-        public static void InitializeDb(IServiceProvider serviceProvider)
-        {
-            using (var context = new SimulatorContext(
-                serviceProvider.GetRequiredService<DbContextOptions<SimulatorContext>>()))
-            {
-                if (context.Teams.Any())
-                {
-                    return; //Data was already seeded
-                }
-
-                ICollection<Team> teams = new List<Team> {
-                    new Team { Id = 1, Name = "Ajax", Points = 0, Strength = 90, Morale = 80 },
-                    new Team { Id = 2, Name = "PSV", Points = 0, Strength = 88, Morale = 80 },
-                    new Team { Id = 3, Name = "Feyenoord", Points = 0, Strength = 78, Morale = 80 },
-                    new Team { Id = 4, Name = "AZ", Points = 0, Strength = 75, Morale = 80 }
-                };
-
-                context.Teams.AddRange(teams);
-
-                if (context.Leagues.Any())
-                {
-                    context.SaveChanges();
-                    return; //We already have a league
-                }
-
-                League league = CreateLeagueMatches(teams.ToList());
-
-                context.Leagues.Add(league);
-
-                context.SaveChanges();
-            }
-        }
-
-        //Algorithm comes from: https://blog.moove-it.com/algorithm-generation-soccer-fixture/
-        private static League CreateLeagueMatches(List<Team> teams)
+        public static League CreateLeagueMatches(this List<Team> teams)
         {
             var league = new League();
             league.Matchdays = new List<MatchDay>();
@@ -79,14 +44,12 @@ namespace GameBasicsSimulator.DB
 
             for (var i = 0; i < teams.Count; i++)
             {
-                //Add teams
                 if (i == 0)
                 {
                     match.TeamOne = lastTeam;
                     continue;
                 }
 
-                //Add match to matchday
                 if (i % 2 == 1)
                 {
                     match.TeamTwo = teams[i - 1];
@@ -110,7 +73,6 @@ namespace GameBasicsSimulator.DB
 
             for (var i = 0; i < len; i++)
             {
-                //Get teams to add to match
                 if (i == 0)
                 {
                     match.TeamOne = lastTeam;
@@ -129,7 +91,6 @@ namespace GameBasicsSimulator.DB
 
                 var firstTeam = teams.First();
 
-                //Add match to matchday
                 if (i % 2 == 1)
                 {
                     match.TeamTwo = firstTeam;
@@ -148,6 +109,7 @@ namespace GameBasicsSimulator.DB
             return matchDay;
         }
 
+        //Create list of teams based on previous matchday
         private static List<Team> CreateNewOrder(this List<Team> teams, MatchDay matchDay)
         {
             teams.RemoveAll(x => true);
@@ -161,5 +123,5 @@ namespace GameBasicsSimulator.DB
 
             return teams;
         }
-    } 
+    }
 }

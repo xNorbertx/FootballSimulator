@@ -1,40 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameBasicsSimulator.DB;
-using GameBasicsSimulator.Model;
+using Simulator.Core.DTO;
+using Simulator.Core.Model;
 
-namespace GameBasicsSimulator.Service
+namespace Simulator.Engine.Algorithms
 {
-    public class GenerateMatch
+    public static class Play
     {
-        private double threshold = 0.65;
-        private SimulatorContext _context;
+        private static double threshold = 0.65;
        
-        public GenerateMatch(SimulatorContext context) {
-            _context = context;
-        }
-
-        public MatchResultDTO Play(Team teamOne, Team teamTwo)
+        public static Match PlayMatch(this Match match)
         {
             //Create a match
-            Match match = new Match();
-
             List<Goal> goals = new List<Goal>();
 
             //Determine strength indicator of teams based on stats
-            double teamOneTotal = getOveralStrength(teamOne);
-            double teamTwoTotal = getOveralStrength(teamTwo);
+            double teamOneTotal = match.TeamOne.getOveralStrength();
+            double teamTwoTotal = match.TeamTwo.getOveralStrength();
 
             double teamOneWinPercentage = teamOneTotal / teamTwoTotal;
             double teamTwoWinPercentage = teamTwoTotal / teamOneTotal;
 
             //Add goals for each team
-            goals.AddRange(addGoals(teamOneWinPercentage, teamOne, teamTwo));
-            goals.AddRange(addGoals(teamTwoWinPercentage, teamTwo, teamOne));
-
-            match.Goals = goals;
-            
+            match.AddGoals(teamOneWinPercentage, teamTwoWinPercentage);
+                      
             List<Goal> teamOneGoals = new List<Goal>();
             List<Goal> teamTwoGoals = new List<Goal>();
             foreach (Goal goal in match.Goals)
@@ -74,34 +64,38 @@ namespace GameBasicsSimulator.Service
             _context.Matches.Add(match);
             _context.SaveChanges();
 
-            return new MatchResultDTO
+            return new Match
             {
                 Score = teamOneGoals.Count.ToString() + "-" + teamTwoGoals.Count.ToString()
             };
         }
 
-        private double getOveralStrength(Team team)
+        private static double getOveralStrength(this Team team)
         {
             return ((team.Strength * 2) + team.Morale) / 3;
         }
 
-        private List<Goal> addGoals(double strength, Team team, Team opponent)
+        private static List<Goal> addGoals(this Match match, double strengthOne, double strengthTwo)
         {
             List<Goal> goals = new List<Goal>();
             Random random = new Random();
             double luck = (double)random.Next(10000) / (double)10000;
             int time = 1;
 
-            //The algorithm which decides the amount of goals, based on luck and strength
-            while (luck * strength * (1 - (time*(0.5/90))) > threshold)
+            for (var i = 0; i < 2; i++)
             {
-                time = random.Next(time, 90);
-                goals.Add(new Goal
+                while (luck * strength * (1 - (time * (0.5 / 90))) > threshold)
                 {
-                    Minute = time,
-                    TeamId = team.Id
-                });
+                    time = random.Next(time, 90);
+                    goals.Add(new Goal
+                    {
+                        Minute = time,
+                        TeamId = team.Id
+                    });
+                }
             }
+            //The algorithm which decides the amount of goals, based on luck and strength
+            
             return goals;
         }
     }   
