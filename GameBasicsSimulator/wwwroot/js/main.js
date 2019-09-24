@@ -66,7 +66,7 @@ function startMatch(matchTeams) {
         setMatchScore(data.score);
     }
 
-    $.when(DATAGATEWAY.update('match', JSON.stringify({ Teams: [matchTeams[0], matchTeams[1]] }))).done(onSuccess);
+    $.when(DATAGATEWAY.update('match', JSON.stringify(matchTeams))).done(onSuccess);
 }
 
 //Set score of match

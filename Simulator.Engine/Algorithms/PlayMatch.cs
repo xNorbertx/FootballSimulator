@@ -23,13 +23,14 @@ namespace Simulator.Engine.Algorithms
             double teamTwoWinPercentage = teamTwoTotal / teamOneTotal;
 
             //Add goals for each team
-            match.AddGoals(teamOneWinPercentage, teamTwoWinPercentage);
+            match.Goals = new List<Goal>();
+            match.AddGoals(new List<double> { teamOneWinPercentage, teamTwoWinPercentage });
                       
             List<Goal> teamOneGoals = new List<Goal>();
             List<Goal> teamTwoGoals = new List<Goal>();
             foreach (Goal goal in match.Goals)
             {
-                if (goal.TeamId == teamOne.Id)
+                if (goal.TeamId == match.TeamOne.Id)
                 {
                     teamOneGoals.Add(goal);
                 }
@@ -40,34 +41,28 @@ namespace Simulator.Engine.Algorithms
             }
 
             //Add points and alter morale stats for each team
-            Team DbTeamOne = _context.Teams.Where(t => t.Id == teamOne.Id).First();
-            Team DbTeamTwo = _context.Teams.Where(t => t.Id == teamTwo.Id).First();
+            Team DbTeamOne = match.TeamOne;
+            Team DbTeamTwo = match.TeamTwo;
 
             if (teamOneGoals.Count > teamTwoGoals.Count)
             {
-                DbTeamOne.Points += 3;
-                DbTeamOne.Morale += 2;
-                DbTeamTwo.Morale -= 2;
+                match.TeamOne.Points += 3;
+                match.TeamOne.Morale += 2;
+                match.TeamTwo.Morale -= 2;
             }
             else if (teamTwoGoals.Count > teamOneGoals.Count)
             {
-                DbTeamTwo.Points += 3;
-                DbTeamOne.Morale -= 2;
-                DbTeamTwo.Morale += 2;
+                match.TeamTwo.Points += 3;
+                match.TeamOne.Morale -= 2;
+                match.TeamTwo.Morale += 2;
             }
             else
             {
-                DbTeamOne.Points += 1;
-                DbTeamTwo.Points += 1;
+                match.TeamOne.Points += 1;
+                match.TeamTwo.Points += 1;
             }
 
-            _context.Matches.Add(match);
-            _context.SaveChanges();
-
-            return new Match
-            {
-                Score = teamOneGoals.Count.ToString() + "-" + teamTwoGoals.Count.ToString()
-            };
+            return match;
         }
 
         private static double getOveralStrength(this Team team)
@@ -75,28 +70,27 @@ namespace Simulator.Engine.Algorithms
             return ((team.Strength * 2) + team.Morale) / 3;
         }
 
-        private static List<Goal> addGoals(this Match match, double strengthOne, double strengthTwo)
+        private static Match AddGoals(this Match match, List<double> strength)
         {
-            List<Goal> goals = new List<Goal>();
             Random random = new Random();
-            double luck = (double)random.Next(10000) / (double)10000;
             int time = 1;
 
             for (var i = 0; i < 2; i++)
             {
-                while (luck * strength * (1 - (time * (0.5 / 90))) > threshold)
+                double luck = (double)random.Next(10000) / (double)10000;
+
+                while (luck * strength[i] * (1 - (time * (0.5 / 90))) > threshold)
                 {
                     time = random.Next(time, 90);
-                    goals.Add(new Goal
+                    match.Goals.Add(new Goal
                     {
                         Minute = time,
-                        TeamId = team.Id
+                        TeamId = (i == 0 ? match.TeamOne.Id : match.TeamTwo.Id)
                     });
                 }
             }
-            //The algorithm which decides the amount of goals, based on luck and strength
-            
-            return goals;
+
+            return match;
         }
     }   
 }

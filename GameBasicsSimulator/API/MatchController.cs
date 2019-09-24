@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Simulator.Core.DTO;
 using Simulator.Core.Model;
+using Simulator.Engine.Algorithms;
 using Simulator.Infrastructure.DB;
 
 namespace Simulator.Web.API
@@ -38,22 +39,26 @@ namespace Simulator.Web.API
         [HttpPost]
         public ActionResult Play([FromBody]SimpleMatchDto model)
         {
-            if (!String.IsNullOrEmpty(model.TeamOne) && !String.IsNullOrEmpty(model.TeamTwo))
+            if (string.IsNullOrEmpty(model.TeamOne) || string.IsNullOrEmpty(model.TeamTwo))
             {
                 return BadRequest("Oops.. no teams");
             }
 
-            //Find teams
-            List<Team> teams = _context.Teams.Where(t => t.Name == model.TeamOne ||
-                                                         t.Name == model.TeamTwo).ToList();
-
+            //Find the match that is being played
+            Match match = _context.Matches.FirstOrDefault(m => (m.TeamOne.Name == model.TeamOne &&
+                                                                m.TeamTwo.Name == model.TeamTwo) ||
+                                                               (m.TeamOne.Name == model.TeamTwo &&
+                                                                m.TeamTwo.Name == model.TeamOne));
+            match.TeamOne = _context.Teams.Where(x => x.Name == model.TeamOne).First();
+            match.TeamTwo = _context.Teams.Where(x => x.Name == model.TeamTwo).First();
             //Play match
-            var matchResult = teams.PlayMatch();
+            var playedMatch = match.PlayMatch();
+
             //Extension method for play match algorithm
             //GenerateMatch matchGenerator = new GenerateMatch(_context);
             //MatchResultDTO res = matchGenerator.Play(model.Teams[0], model.Teams[1]);
 
-            return Ok(); 
+            return Ok(playedMatch); 
         }
 
         [HttpPost]
